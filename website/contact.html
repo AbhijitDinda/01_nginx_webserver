@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Contact TechBridge India - reach out for course admissions, lab help, and support.">
+    <title>Contact Us | TechBridge India</title>
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/responsive.css">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="./images/logo.png">
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header class="site-header">
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <img src="./images/logo.png" alt="TechBridge Logo" class="logo">
+                <span class="brand-name">TechBridge India</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="./index.html">Home</a></li>
+                <li><a href="./about.html">About</a></li>
+                <li><a href="./services.html">Services</a></li>
+                <li><a href="./contact.html" class="active">Contact</a></li>
+            </ul>
+            <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+</header>
+
+<!-- ── PAGE HERO ── -->
+<section class="page-hero">
+    <div class="container">
+        <h1>Contact Us</h1>
+        <p>Get in touch with our team for enrollment inquiries, lab assistance, or institutional partnerships.</p>
+    </div>
+</section>
+
+<!-- ── CONTACT SECTION ── -->
+<section class="page-section">
+    <div class="container">
+        <div class="contact-grid">
+            
+            <!-- Left Column: Info -->
+            <div class="contact-info-section">
+                <h2>Get In Touch</h2>
+                <p>Have questions about our syllabus or training labs? Drop us a line or visit our office. We are happy to help!</p>
+                
+                <div class="contact-info-list">
+                    
+                    <div class="contact-info-item">
+                        <div class="contact-info-icon">📍</div>
+                        <div class="contact-info-text">
+                            <h4>Location</h4>
+                            <p>Outer Ring Road, Bellandur, Bangalore, Karnataka 560103</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-info-item">
+                        <div class="contact-info-icon">📧</div>
+                        <div class="contact-info-text">
+                            <h4>Email</h4>
+                            <p>info@techbridge.in</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-info-item">
+                        <div class="contact-info-icon">📞</div>
+                        <div class="contact-info-text">
+                            <h4>Phone</h4>
+                            <p>+91 80 4930 2000</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-info-item">
+                        <div class="contact-info-icon">🕒</div>
+                        <div class="contact-info-text">
+                            <h4>Working Hours</h4>
+                            <p>Monday - Saturday: 9:00 AM - 6:00 PM IST</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Right Column: Form -->
+            <div class="contact-form-section">
+                <h2>Send Message</h2>
+                <form class="contact-form" action="#" method="POST" id="contactForm">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" name="name" class="form-control" placeholder="Your Name" data-label="Name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" class="form-control" placeholder="Your Email" data-label="Email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="subject">Subject</label>
+                        <input type="text" id="subject" name="subject" class="form-control" placeholder="Message Subject" data-label="Subject" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" class="form-control" placeholder="Write your message here..." data-label="Message" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Send Message</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer class="site-footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <img src="./images/logo.png" alt="Logo" class="footer-logo">
+                <p>TechBridge India — Teaching the Web, One Stack at a Time</p>
+            </div>
+            <div class="footer-links">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="./index.html">Home</a></li>
+                    <li><a href="./about.html">About</a></li>
+                    <li><a href="./services.html">Services</a></li>
+                    <li><a href="./contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-tech">
+                <h4>Tech Stack</h4>
+                <p>Nginx • Docker • AWS EC2 • GitHub Actions</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 TechBridge India. Educational Demonstration Project.</p>
+            <p class="server-credit">Served by Nginx on AWS EC2</p>
+        </div>
+    </div>
+</footer>
+
+<!-- JavaScript -->
+<script src="./js/main.js"></script>
+<script src="./js/form-validator.js"></script>
+</body>
+</html>
