@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Server Error | TechBridge India</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/error-pages.css">
+    <link rel="icon" type="image/png" href="/images/logo.png">
+</head>
+<body class="error-page-body error-server">
+
+<!-- Minimal Header -->
+<header class="error-header">
+    <div class="container">
+        <a href="/" class="error-brand">
+            <img src="/images/logo.png" alt="TechBridge Logo" class="error-logo">
+            <span>TechBridge India</span>
+        </a>
+    </div>
+</header>
+
+<!-- Error Content -->
+<main class="error-main">
+    <div class="container">
+        <div class="error-card error-card-server">
+
+            <!-- Error Code Display -->
+            <div class="error-code-wrapper">
+                <div class="error-code error-5xx" id="errorCodeDisplay">
+                    <span class="digit">5</span>
+                    <span class="digit zero pulse-zero">0</span>
+                    <span class="digit" id="lastDigit">0</span>
+                </div>
+            </div>
+
+            <!-- Server Error Icon -->
+            <div class="error-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     viewBox="0 0 100 100"
+                     width="120" height="120">
+                    <circle cx="50" cy="50" r="45"
+                            fill="none" stroke="#ef4444"
+                            stroke-width="3" opacity="0.2"/>
+                    <text x="50" y="65"
+                          text-anchor="middle"
+                          font-size="50">⚠️</text>
+                </svg>
+            </div>
+
+            <!-- Dynamic Error Title and Description -->
+            <h1 class="error-title" id="errorTitle">Internal Server Error</h1>
+            <p class="error-description" id="errorDescription">
+                Something went wrong on our server. This is not your fault.
+                Our team has been notified and we are working to fix it.
+            </p>
+
+            <!-- Error Details Box -->
+            <div class="error-url-box error-server-box">
+                <span class="error-url-label">Error Code:</span>
+                <code class="error-url" id="errorCode">500</code>
+                <span class="error-url-label" style="margin-left:16px;">Time:</span>
+                <code class="error-url" id="errorTime"></code>
+            </div>
+
+            <!-- Status Indicators -->
+            <div class="server-status-grid">
+                <div class="status-item">
+                    <span class="status-dot status-checking" id="webStatus"></span>
+                    <span>Web Server</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-dot status-checking" id="appStatus"></span>
+                    <span>Application</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-dot status-checking" id="dbStatus"></span>
+                    <span>Services</span>
+                </div>
+            </div>
+
+            <!-- What's happening -->
+            <div class="error-suggestions">
+                <h2>What's happening?</h2>
+                <div id="errorExplanation">
+                    <!-- Filled by JavaScript based on error code -->
+                </div>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="error-actions">
+                <button onclick="location.reload()" class="btn btn-primary">
+                    🔄 Try Again
+                </button>
+                <a href="/" class="btn btn-secondary">
+                    🏠 Go to Homepage
+                </a>
+                <a href="/contact.html" class="btn btn-ghost">
+                    📧 Report Issue
+                </a>
+            </div>
+
+            <!-- HTTP Education (for teaching) -->
+            <details class="error-http-info">
+                <summary>🎓 Understanding 5xx Errors</summary>
+                <div class="error-http-body">
+                    <table class="error-table">
+                        <thead>
+                        <tr>
+                            <th>Code</th>
+                            <th>Name</th>
+                            <th>Meaning</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td><strong>500</strong></td>
+                            <td>Internal Server Error</td>
+                            <td>Generic server error. Check Nginx error logs.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>502</strong></td>
+                            <td>Bad Gateway</td>
+                            <td>Nginx received invalid response from upstream server.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>503</strong></td>
+                            <td>Service Unavailable</td>
+                            <td>Server temporarily unable to handle requests. Maintenance mode.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>504</strong></td>
+                            <td>Gateway Timeout</td>
+                            <td>Nginx didn't receive response from upstream in time.</td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <p style="margin-top: 1rem;">
+                        In our static Nginx setup, 5xx errors typically mean
+                        Nginx itself crashed or had a configuration issue.
+                        Check: <code>docker logs nginx-webserver</code> on EC2.
+                    </p>
+                </div>
+            </details>
+
+        </div>
+    </div>
+</main>
+
+<!-- Footer -->
+<footer class="error-footer">
+    <div class="container">
+        <p>
+            Server Error · Served by Nginx on AWS EC2 · TechBridge India 2025
+        </p>
+    </div>
+</footer>
+
+<script>
+    // Set current time
+    document.getElementById('errorTime').textContent =
+        new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
+
+    // Error explanations by code
+    const errorInfo = {
+        500: {
+            title: 'Internal Server Error',
+            description: 'An unexpected condition was encountered. The server could not complete your request.',
+            explanation: '<ul><li>⚠️ Application or server misconfiguration</li><li>⚠️ Unexpected runtime exception</li><li>⚠️ Check server error logs for details</li></ul>'
+        },
+        502: {
+            title: 'Bad Gateway',
+            description: 'The server received an invalid response from an upstream server. This usually means a service behind Nginx crashed.',
+            explanation: '<ul><li>⚠️ Upstream application server is down</li><li>⚠️ Proxy configuration mismatch</li><li>⚠️ Backend service returned invalid HTTP response</li></ul>'
+        },
+        503: {
+            title: 'Service Unavailable',
+            description: 'The server is temporarily unable to handle the request. This is usually temporary.',
+            explanation: '<ul><li>⚠️ Server is under maintenance</li><li>⚠️ Too many requests — server is overloaded</li><li>⚠️ Please wait a few minutes and try again</li></ul>'
+        },
+        504: {
+            title: 'Gateway Timeout',
+            description: 'The upstream server did not respond in time. The connection timed out.',
+            explanation: '<ul><li>⚠️ Upstream server is taking too long</li><li>⚠️ Network connectivity issues between servers</li><li>⚠️ Database query running too long</li></ul>'
+        }
+    };
+
+    // Detect error code from URL or use 500 as default
+    function detectErrorCode() {
+        // Nginx passes the error status via $status
+        // Since this is a static page, we read from URL params if available
+        const params = new URLSearchParams(window.location.search);
+        const code = parseInt(params.get('code')) || 500;
+        return errorInfo[code] ? code : 500;
+    }
+
+    const code = detectErrorCode();
+    const info = errorInfo[code];
+
+    // Update page content
+    document.getElementById('errorCode').textContent = code;
+    document.getElementById('errorTitle').textContent = info.title;
+    document.getElementById('errorDescription').textContent = info.description;
+    document.getElementById('errorExplanation').innerHTML = info.explanation;
+    document.getElementById('lastDigit').textContent = String(code)[2];
+
+    // Simulate status checks
+    setTimeout(function() {
+        document.getElementById('webStatus').className = 'status-dot status-ok';
+    }, 1000);
+    setTimeout(function() {
+        document.getElementById('appStatus').className = 'status-dot status-error';
+    }, 1500);
+    setTimeout(function() {
+        document.getElementById('dbStatus').className = 'status-dot status-ok';
+    }, 2000);
+</script>
+
+</body>
+</html>

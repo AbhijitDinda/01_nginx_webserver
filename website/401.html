@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>401 — Unauthorized | TechBridge India</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/error-pages.css">
+    <link rel="icon" type="image/png" href="/images/logo.png">
+</head>
+<body class="error-page-body">
+
+<!-- Minimal Header -->
+<header class="error-header">
+    <div class="container">
+        <a href="/" class="error-brand">
+            <img src="/images/logo.png" alt="TechBridge Logo" class="error-logo">
+            <span>TechBridge India</span>
+        </a>
+    </div>
+</header>
+
+<!-- Error Content -->
+<main class="error-main">
+    <div class="container">
+        <div class="error-card">
+
+            <!-- Animated 401 Number -->
+            <div class="error-code-wrapper">
+                <div class="error-code" aria-hidden="true">
+                    <span class="digit" id="digit1">4</span>
+                    <span class="digit zero pulse-zero" id="digit0">0</span>
+                    <span class="digit" id="digit2">1</span>
+                </div>
+            </div>
+
+            <!-- Error Icon -->
+            <div class="error-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     viewBox="0 0 100 100"
+                     width="120" height="120">
+                    <circle cx="50" cy="50" r="45"
+                            fill="none" stroke="#2563eb"
+                            stroke-width="3" opacity="0.2"/>
+                    <text x="50" y="65"
+                          text-anchor="middle"
+                          font-size="50"
+                          fill="#2563eb">🔑</text>
+                </svg>
+            </div>
+
+            <!-- Error Message -->
+            <h1 class="error-title">Unauthorized Access</h1>
+            <p class="error-description">
+                You must authenticate or provide valid credentials to access this resource.
+                If you were previously logged in, your session may have expired.
+            </p>
+
+            <!-- Requested URL Display -->
+            <div class="error-url-box">
+                <span class="error-url-label">You requested:</span>
+                <code class="error-url" id="requestedUrl"></code>
+            </div>
+
+            <!-- What You Can Do -->
+            <div class="error-suggestions">
+                <h2>What you can do:</h2>
+                <ul>
+                    <li>✅ Check your credentials (username/password/token)</li>
+                    <li>✅ Log in to your account and try again</li>
+                    <li>✅ Clear your browser session/cookies and reload the page</li>
+                    <li>✅ Contact support if you believe you should have access</li>
+                </ul>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="error-actions">
+                <a href="/" class="btn btn-primary">
+                    🏠 Go to Homepage
+                </a>
+                <a href="/contact.html" class="btn btn-secondary">
+                    📧 Contact Us
+                </a>
+                <button onclick="history.back()" class="btn btn-ghost">
+                    ← Go Back
+                </button>
+            </div>
+
+            <!-- Quick Links -->
+            <nav class="error-quick-links" aria-label="Quick navigation">
+                <p>Quick Links:</p>
+                <a href="/index.html">Home</a>
+                <span>·</span>
+                <a href="/about.html">About</a>
+                <span>·</span>
+                <a href="/services.html">Services</a>
+                <span>·</span>
+                <a href="/contact.html">Contact</a>
+            </nav>
+
+            <!-- HTTP Info (Educational - for teaching) -->
+            <details class="error-http-info">
+                <summary>🎓 What is HTTP 401?</summary>
+                <div class="error-http-body">
+                    <p>
+                        <strong>HTTP 401 Unauthorized</strong> is a standard HTTP response
+                        status code indicating that the client request has not been completed
+                        because it lacks valid authentication credentials for the resource.
+                    </p>
+                    <p>
+                        <strong>Common causes:</strong> Missing or incorrect authorization headers,
+                        invalid or expired API keys/session tokens, failed login attempt.
+                    </p>
+                    <code class="http-example">
+                        HTTP/1.1 401 Unauthorized<br>
+                        WWW-Authenticate: Basic realm="Secure Area"<br>
+                        Server: nginx<br>
+                        Content-Type: text/html<br>
+                    </code>
+                </div>
+            </details>
+
+        </div>
+    </div>
+</main>
+
+<!-- Footer -->
+<footer class="error-footer">
+    <div class="container">
+        <p>HTTP 401 · Served by Nginx on AWS EC2 · TechBridge India 2025</p>
+    </div>
+</footer>
+
+<script>
+    // Display the URL that triggered the 401
+    document.getElementById('requestedUrl').textContent =
+        window.location.pathname + window.location.search;
+
+    // Animate digits
+    const digits = document.querySelectorAll('.digit');
+    digits.forEach(function(d, i) {
+        d.style.animationDelay = (i * 0.1) + 's';
+    });
+</script>
+
+</body>
+</html>
