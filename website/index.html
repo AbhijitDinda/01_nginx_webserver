@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="TechBridge India - Full Stack Development Training Institute">
+    <title>TechBridge India | Web Server Demo</title>
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/responsive.css">
+
+    <!-- Favicon placeholder -->
+    <link rel="icon" type="image/png" href="./images/logo.png">
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header class="site-header">
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <img src="./images/logo.png" alt="TechBridge Logo" class="logo">
+                <span class="brand-name">TechBridge India</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="./index.html" class="active">Home</a></li>
+                <li><a href="./about.html">About</a></li>
+                <li><a href="./services.html">Services</a></li>
+                <li><a href="./contact.html">Contact</a></li>
+            </ul>
+            <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+</header>
+
+<!-- ── HERO SECTION ── -->
+<section class="hero">
+    <div class="container">
+        <div class="hero-content">
+            <h1 class="hero-title">
+                Learn <span class="highlight">Nginx Web Server</span>
+                on AWS EC2
+            </h1>
+            <p class="hero-subtitle">
+                A complete hands-on demonstration of deploying a containerized
+                Nginx web server on AWS EC2 using Docker and GitHub Actions CI/CD.
+            </p>
+            <div class="hero-buttons">
+                <a href="./services.html" class="btn btn-primary">Explore Services</a>
+                <a href="./docs/technical-guide.pdf" class="btn btn-secondary" target="_blank">
+                    📄 Download Guide
+                </a>
+            </div>
+            <div class="server-info" id="serverInfo">
+                <!-- Filled by JavaScript -->
+            </div>
+        </div>
+        <div class="hero-image">
+            <img src="./images/hero-banner.jpeg"
+                 alt="Server Architecture Diagram"
+                 class="hero-img">
+        </div>
+    </div>
+</section>
+
+<!-- ── STATS SECTION ── -->
+<section class="stats-section">
+    <div class="container">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number" data-target="1000">0</div>
+                <div class="stat-label">Requests Per Second</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" data-target="99">0</div>
+                <div class="stat-label">% Uptime SLA</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" data-target="23">0</div>
+                <div class="stat-label">MB Docker Image Size</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" data-target="5">0</div>
+                <div class="stat-label">Deploy Time (seconds)</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ── FEATURES SECTION ── -->
+<section class="features-section">
+    <div class="container">
+        <h2 class="section-title">What This Project Demonstrates</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🐋</div>
+                <h3>Docker Containerization</h3>
+                <p>Nginx running inside an Alpine Linux Docker container.
+                    23MB image, fast pull, consistent environment.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">☁️</div>
+                <h3>AWS EC2 Deployment</h3>
+                <p>Hosted on AWS EC2 t2.micro inside a custom VPC
+                    with security groups and proper IAM configuration.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚙️</div>
+                <h3>GitHub Actions CI/CD</h3>
+                <p>Automated pipeline: push code → build image →
+                    push to Docker Hub → deploy to EC2. Zero manual steps.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📦</div>
+                <h3>Static File Serving</h3>
+                <p>Serves HTML, CSS, JS, PNG, JPEG, and PDF files
+                    with proper MIME types and cache headers.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ── TEAM PHOTO SECTION ── -->
+<section class="team-section">
+    <div class="container">
+        <h2 class="section-title">Our Teaching Team</h2>
+        <div class="team-photo-container">
+            <img src="./images/team-photo.png"
+                 alt="TechBridge Teaching Team"
+                 class="team-photo">
+            <p class="team-caption">
+                Our experienced instructors bring real-world industry experience
+                to undergraduate computer science education.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- ── ARCHITECTURE SECTION ── -->
+<section class="arch-section">
+    <div class="container">
+        <h2 class="section-title">Server Architecture</h2>
+        <img src="./images/server-diagram.png"
+             alt="Nginx on AWS EC2 Architecture Diagram"
+             class="arch-diagram">
+    </div>
+</section>
+
+<!-- ── DOWNLOADS SECTION ── -->
+<section class="downloads-section">
+    <div class="container">
+        <h2 class="section-title">Resources &amp; Downloads</h2>
+        <div class="download-cards">
+            <div class="download-card">
+                <div class="download-icon">📋</div>
+                <h3>Company Brochure</h3>
+                <p>Learn about TechBridge programs, fee structure, and placement record.</p>
+                <a href="./docs/company-brochure.pdf" class="btn btn-download" target="_blank">
+                    Download PDF
+                </a>
+            </div>
+            <div class="download-card">
+                <div class="download-icon">📖</div>
+                <h3>Technical Guide</h3>
+                <p>Complete Nginx + Docker + AWS EC2 technical reference guide.</p>
+                <a href="./docs/technical-guide.pdf" class="btn btn-download" target="_blank">
+                    Download PDF
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer class="site-footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <img src="./images/logo.png" alt="Logo" class="footer-logo">
+                <p>TechBridge India — Teaching the Web, One Stack at a Time</p>
+            </div>
+            <div class="footer-links">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="./index.html">Home</a></li>
+                    <li><a href="./about.html">About</a></li>
+                    <li><a href="./services.html">Services</a></li>
+                    <li><a href="./contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-tech">
+                <h4>Tech Stack</h4>
+                <p>Nginx • Docker • AWS EC2 • GitHub Actions</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 TechBridge India. Educational Demonstration Project.</p>
+            <p class="server-credit">Served by Nginx on AWS EC2</p>
+        </div>
+    </div>
+</footer>
+
+<!-- JavaScript -->
+<script src="./js/main.js"></script>
+</body>
+</html>

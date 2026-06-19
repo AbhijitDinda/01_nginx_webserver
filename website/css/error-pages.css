@@ -1,0 +1,425 @@
+/* ==============================================================
+   error-pages.css — Styles for 404 and 5xx Error Pages
+   ============================================================== */
+
+/* ── Error Page Body ── */
+.error-page-body {
+    background: linear-gradient(135deg, #f0f4ff 0%, #e8eeff 50%, #f5f0ff 100%);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.error-page-body.error-server {
+    background: linear-gradient(135deg, #fff0f0 0%, #ffe8e8 50%, #fff5f5 100%);
+}
+
+/* ── Error Header ── */
+.error-header {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(37, 99, 235, 0.1);
+    padding: 16px 0;
+}
+
+.error-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: var(--text-primary);
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.error-logo {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+}
+
+/* ── Error Main Content ── */
+.error-main {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    padding: 40px 0;
+}
+
+/* ── Error Card ── */
+.error-card {
+    background: white;
+    border-radius: 24px;
+    padding: 3rem;
+    max-width: 700px;
+    margin: 0 auto;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(37, 99, 235, 0.1);
+    border: 1px solid rgba(37, 99, 235, 0.08);
+}
+
+.error-card-server {
+    box-shadow: 0 20px 60px rgba(239, 68, 68, 0.1);
+    border-color: rgba(239, 68, 68, 0.08);
+}
+
+/* ── 404 Code Display ── */
+.error-code-wrapper {
+    margin-bottom: 1.5rem;
+}
+
+.error-code {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    margin-bottom: 0;
+}
+
+.digit {
+    display: inline-block;
+    font-size: 8rem;
+    font-weight: 900;
+    color: var(--primary-color);
+    line-height: 1;
+    animation: bounceIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) both;
+    text-shadow: 0 4px 20px rgba(37, 99, 235, 0.25);
+}
+
+.error-5xx .digit {
+    color: #ef4444;
+    text-shadow: 0 4px 20px rgba(239, 68, 68, 0.25);
+}
+
+.digit.zero {
+    animation-delay: 0.1s;
+    color: #7c3aed;
+}
+
+.pulse-zero {
+    animation: bounceIn 0.6s 0.1s cubic-bezier(0.68, -0.55, 0.265, 1.55) both,
+    pulse 2s 1s ease-in-out infinite;
+}
+
+@keyframes bounceIn {
+    0% { transform: scale(0) rotate(-10deg); opacity: 0; }
+    60% { transform: scale(1.1) rotate(3deg); }
+    100% { transform: scale(1) rotate(0); opacity: 1; }
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+/* ── Error Icon ── */
+.error-icon {
+    margin: 0 auto 1.5rem;
+    display: flex;
+    justify-content: center;
+    animation: fadeInUp 0.5s 0.3s ease both;
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Error Text ── */
+.error-title {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    animation: fadeInUp 0.5s 0.4s ease both;
+}
+
+.error-description {
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+    animation: fadeInUp 0.5s 0.5s ease both;
+}
+
+/* ── URL Box ── */
+.error-url-box {
+    background: #f8fafc;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+    animation: fadeInUp 0.5s 0.55s ease both;
+}
+
+.error-server-box {
+    background: #fff5f5;
+    border-color: #fecaca;
+}
+
+.error-url-label {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+.error-url {
+    font-family: var(--font-mono), serif;
+    font-size: 0.85rem;
+    color: var(--primary-color);
+    background: white;
+    padding: 3px 8px;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+    word-break: break-all;
+}
+
+/* ── Error Suggestions ── */
+.error-suggestions {
+    text-align: left;
+    background: #f0f7ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 2rem;
+    animation: fadeInUp 0.5s 0.6s ease both;
+}
+
+.error-card-server .error-suggestions {
+    background: #fff5f5;
+    border-color: #fecaca;
+}
+
+.error-suggestions h2 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.error-suggestions ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.error-suggestions ul li {
+    padding: 5px 0;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.error-suggestions ul li a {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+/* ── Server Status Grid ── */
+.server-status-grid {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    animation: fadeInUp 0.5s 0.58s ease both;
+}
+
+.status-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.status-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
+    transition: background-color 0.5s ease;
+}
+
+.status-checking {
+    background: #d1d5db;
+    animation: blink 1s infinite;
+}
+
+.status-ok {
+    background: #10b981;
+}
+
+.status-error {
+    background: #ef4444;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+/* ── Error Actions ── */
+.error-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+    animation: fadeInUp 0.5s 0.7s ease both;
+}
+
+.btn-ghost {
+    background: transparent;
+    color: var(--text-secondary);
+    border: 2px solid var(--border-color);
+    padding: 11px 24px;
+    cursor: pointer;
+    font-family: var(--font-family), serif;
+}
+
+.btn-ghost:hover {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+}
+
+/* ── Quick Links ── */
+.error-quick-links {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    animation: fadeInUp 0.5s 0.75s ease both;
+}
+
+.error-quick-links a {
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+.error-quick-links a:hover {
+    text-decoration: underline;
+}
+
+/* ── HTTP Info Details ── */
+.error-http-info {
+    text-align: left;
+    background: #f8fafc;
+    border: 1px dashed var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+    animation: fadeInUp 0.5s 0.8s ease both;
+}
+
+.error-http-info summary {
+    padding: 1rem;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    user-select: none;
+    list-style: none;
+}
+
+.error-http-info summary:hover {
+    background: #f0f4ff;
+    color: var(--primary-color);
+}
+
+.error-http-body {
+    padding: 1rem;
+    border-top: 1px solid var(--border-color);
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+}
+
+.error-http-body p {
+    margin-bottom: 0.75rem;
+}
+
+.http-example {
+    display: block;
+    background: #1f2937;
+    color: #10b981;
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    line-height: 1.8;
+    white-space: pre-wrap;
+}
+
+/* ── Error Table ── */
+.error-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+}
+
+.error-table th,
+.error-table td {
+    padding: 8px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.error-table th {
+    background: #f0f4ff;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.error-table td:first-child {
+    font-family: var(--font-mono), serif;
+    font-weight: 700;
+    color: #ef4444;
+}
+
+/* ── Error Footer ── */
+.error-footer {
+    padding: 20px 0;
+    border-top: 1px solid rgba(0,0,0,0.06);
+    text-align: center;
+}
+
+.error-footer p {
+    font-size: 0.8rem;
+    color: var(--text-light);
+    font-family: var(--font-mono), serif;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+    .error-card {
+        padding: 2rem 1.5rem;
+        border-radius: 16px;
+    }
+
+    .digit {
+        font-size: 5rem;
+    }
+
+    .error-title {
+        font-size: 1.5rem;
+    }
+
+    .error-actions {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .server-status-grid {
+        gap: 1rem;
+    }
+}
