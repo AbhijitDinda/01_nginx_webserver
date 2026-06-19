@@ -78,7 +78,7 @@ jobs:
 
     environment:
       name: production
-      url: http://${{ secrets.EC2_HOST }}
+      # url: http://${{ secrets.EC2_HOST }}
 
     steps:
 
