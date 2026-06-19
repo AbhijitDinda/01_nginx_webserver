@@ -1,0 +1,16 @@
+# robots.txt — Instructions for web crawlers
+# https://www.robotstxt.org/
+
+# Allow all robots
+User-agent: *
+Allow: /
+
+# Block access to error pages in search results
+Disallow: /404.html
+Disallow: /50x.html
+Disallow: /400.html
+Disallow: /401.html
+Disallow: /403.html
+
+# Sitemap (update with your actual domain)
+# Sitemap: https://your-domain.com/sitemap.xml
