@@ -1,24 +1,14 @@
-# ==============================================================
-# deploy.yml — GitHub Actions CI/CD Pipeline
-# Trigger: Every push to main branch
-# Pipeline:
-#   Job 1 (build-and-push): Build Docker image → Push to Docker Hub
-#   Job 2 (deploy-to-ec2): SSH into EC2 → Pull image → Run container
-# ==============================================================
-
 name: Build, Push & Deploy Nginx Web Server
 
-# ── TRIGGER ───────────────────────────────────────────────────
 on:
-  # Run on every push to main
   push:
     branches:
       - main
-  # Run on PRs to main (build + test only, NO deploy)
+
   pull_request:
     branches:
       - main
-  # Allow manual trigger from GitHub Actions UI
+
   workflow_dispatch:
     inputs:
       deploy:
@@ -30,160 +20,70 @@ on:
           - 'yes'
           - 'no'
 
-# ── ENVIRONMENT VARIABLES ─────────────────────────────────────
 env:
   DOCKER_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/nginx-webserver
   CONTAINER_NAME: nginx-webserver
   HOST_PORT: 80
   CONTAINER_PORT: 80
 
-# ═════════════════════════════════════════════════════════════
-# JOB 1: BUILD AND PUSH DOCKER IMAGE
-# ═════════════════════════════════════════════════════════════
 jobs:
 
   build-and-push:
     name: Build & Push Docker Image
     runs-on: ubuntu-latest
 
-    outputs:
-      # Pass the image tag to the deploy job
-      image_tag: ${{ steps.meta.outputs.version }}
-
     steps:
-
-      # ── Step 1: Checkout Code ──────────────────────────────
-      # Fetches your repository code onto the GitHub Actions runner
       - name: Checkout Repository
         uses: actions/checkout@v4
-        with:
-          # Fetch full history for proper versioning
-          fetch-depth: 0
 
-      # ── Step 2: Setup Docker Buildx ───────────────────────
-      # Docker Buildx = extended build capabilities
-      # Supports multi-platform builds, caching, advanced features
-      - name:  Set up Docker Buildx
+      - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-        with:
-          driver-opts: |
-            image=moby/buildkit:master
 
-      # ── Step 3: Login to Docker Hub ───────────────────────
-      # Uses secrets we configured in GitHub repository settings
       - name: Login to Docker Hub
+        if: github.event_name != 'pull_request'
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # ── Step 4: Extract Image Metadata ────────────────────
-      # Generates Docker tags and labels automatically:
-      #   latest      (from main branch)
-      #   main        (branch name)
-      #   sha-abc1234 (git commit SHA for traceability)
-      #   42          (GitHub run number)
       - name: Extract Docker Metadata
         id: meta
         uses: docker/metadata-action@v5
         with:
           images: ${{ env.DOCKER_IMAGE }}
           tags: |
-            type=raw,value=latest,enable={{is_default_branch}}
-            type=ref,event=branch
+            type=raw,value=latest
             type=sha,prefix=sha-,format=short
             type=raw,value=build-${{ github.run_number }}
-          labels: |
-            org.opencontainers.image.title=TechBridge Nginx Web Server
-            org.opencontainers.image.description=Static web server demo
-            org.opencontainers.image.url=https://github.com/${{ github.repository }}
 
-      # ── Step 5: Build and Push Docker Image ───────────────
-      # Builds the image using our Dockerfile
-      # Pushes to Docker Hub (only on push event, not PRs)
-      # Uses GitHub Actions cache to speed up subsequent builds
       - name: Build and Push Docker Image
-        id: build-push
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: ./Dockerfile
-          # Only push when it's an actual push (not a PR)
-          push: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
+          push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          # Cache layers from GitHub Actions cache
-          # Speeds up rebuild when only website files change (Nginx layer cached)
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          # Build arguments (optional)
-          build-args: |
-            BUILD_DATE=${{ github.event.head_commit.timestamp }}
-            GIT_COMMIT=${{ github.sha }}
 
-      # ── Step 6: Verify Image Was Pushed ───────────────────
-      - name: Print Image Digest
-        run: |
-          echo "=========================================="
-          echo "Image: ${{ env.DOCKER_IMAGE }}:latest"
-          echo "Digest: ${{ steps.build-push.outputs.digest }}"
-          echo "Tags: ${{ steps.meta.outputs.tags }}"
-          echo "Run Number: ${{ github.run_number }}"
-          echo "Git SHA: ${{ github.sha }}"
-          echo "=========================================="
-
-  # ══════════════════════════════════════════════════════════
-  # JOB 2: DEPLOY TO AWS EC2
-  # ══════════════════════════════════════════════════════════
   deploy-to-ec2:
-    name:  Deploy to AWS EC2
+    name: Deploy to AWS EC2
     runs-on: ubuntu-latest
-
-    # Only run AFTER build job completes successfully
     needs: build-and-push
 
-    # Only deploy on actual push to main branch (NOT on PRs)
-    if: |
-      github.event_name == 'push' && github.ref == 'refs/heads/main' ||
-      github.event_name == 'workflow_dispatch' && github.event.inputs.deploy == 'yes'
+    if: >
+      (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.deploy == 'yes')
 
-    # Deployment environment (shows in GitHub Actions UI)
     environment:
       name: production
       url: http://${{ secrets.EC2_HOST }}
 
     steps:
 
-      # ── Step 1: Checkout ──────────────────────────────────
-      - name:  Checkout Repository
-        uses: actions/checkout@v4
-
-      # ── Step 2: Setup SSH Key ─────────────────────────────
-      # Writes the .pem key to disk so ssh-action can use it
-      - name:  Setup SSH Key
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.EC2_SSH_PRIVATE_KEY }}" > ~/.ssh/ec2-key.pem
-          chmod 400 ~/.ssh/ec2-key.pem
-          # Add EC2 host to known_hosts to avoid "Host key verification" prompt
-          ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts 2>/dev/null || true
-
-      # ── Step 3: Wait for EC2 SSH ──────────────────────────
-      - name: ⏳ Wait for EC2 SSH to be available
-        run: |
-          echo "Waiting for SSH port to be available..."
-          for i in {1..10}; do
-            if nc -z ${{ secrets.EC2_HOST }} 22; then
-              echo "SSH is available!"
-              break
-            fi
-            echo "Attempt $i: SSH not ready, waiting 5s..."
-            sleep 5
-          done
-
-      # ── Step 4: Deploy via SSH ────────────────────────────
-      - name:  Deploy to EC2
-        uses: appleboy/ssh-action@v1.0.0
+      - name: Deploy to EC2 via SSH
+        uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
@@ -192,117 +92,49 @@ jobs:
           timeout: 120s
           script_stop: true
           script: |
-            set -e  # Exit immediately if any command fails
+            set -e
 
-            echo "══════════════════════════════════════"
-            echo " DEPLOYMENT STARTED"
-            echo "Host: $(hostname)"
-            echo "Date: $(date)"
-            echo "══════════════════════════════════════"
+            echo "===== DEPLOYMENT STARTED ====="
 
-            # ── Verify Docker is running ──
-            echo "Checking Docker status..."
-            if ! systemctl is-active --quiet docker; then
-              echo "Docker not running. Starting..."
+            if ! command -v docker >/dev/null 2>&1; then
+              echo "Installing Docker..."
+              sudo dnf install -y docker || sudo yum install -y docker
+
+              sudo systemctl enable docker
               sudo systemctl start docker
+
+              sudo usermod -aG docker $USER
             fi
-            docker --version
 
-            # ── Login to Docker Hub on EC2 ──
-            # Prevents rate limiting for pulls
+            sudo systemctl start docker
+
+            sudo systemctl stop nginx 2>/dev/null || true
+            sudo systemctl disable nginx 2>/dev/null || true
+
             echo "${{ secrets.DOCKERHUB_TOKEN }}" | \
-              docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" \
-              --password-stdin
+            docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
 
-            # ── Pull the latest image ──
-            echo "Pulling latest image..."
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/nginx-webserver:latest
 
-            # ── Blue-Green-style: Start new before stopping old ──
-            # Stop old container gracefully (10s timeout)
-            echo "Stopping old container (if exists)..."
-            docker stop nginx-webserver --time=10 2>/dev/null || true
-
-            # Remove old container
-            echo "Removing old container (if exists)..."
+            docker stop nginx-webserver 2>/dev/null || true
             docker rm nginx-webserver 2>/dev/null || true
 
-            # ── Run the new container ──
-            echo "Starting new container..."
             docker run -d \
               --name nginx-webserver \
               --restart unless-stopped \
               -p 80:80 \
-              --memory="256m" \
-              --cpus="0.5" \
-              -e NGINX_HOST=localhost \
-              -e NGINX_PORT=80 \
               ${{ secrets.DOCKERHUB_USERNAME }}/nginx-webserver:latest
 
-            # ── Verify container started ──
-            echo "Waiting for container to initialize..."
-            sleep 5
+            echo "Waiting for container startup..."
+            sleep 10
 
-            # Check container is running
-            if ! docker ps | grep -q nginx-webserver; then
-              echo "ERROR: Container failed to start!"
-              docker logs nginx-webserver
-              exit 1
-            fi
+            curl -f http://localhost || exit 1
 
-            echo "Container status:"
-            docker ps --filter name=nginx-webserver \
-              --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
+            docker image prune -af || true
 
-            # ── Health Check ──
-            echo "Running health check..."
-            for i in {1..5}; do
-              if curl -sf http://localhost/ > /dev/null 2>&1; then
-                echo " Health check PASSED (attempt $i)"
-                break
-              fi
-              if [ $i -eq 5 ]; then
-                echo " Health check FAILED after 5 attempts"
-                docker logs nginx-webserver
-                exit 1
-              fi
-              echo "Health check attempt $i failed, retrying..."
-              sleep 3
-            done
+            echo "===== DEPLOYMENT SUCCESSFUL ====="
 
-            # ── Verify all file types are accessible ──
-            echo "Verifying file serving..."
-            curl -sf -o /dev/null http://localhost/ && echo " HTML: OK"
-            curl -sf -o /dev/null http://localhost/css/style.css && echo " CSS: OK" || echo " CSS: not found (add file)"
-            curl -sf -o /dev/null http://localhost/js/main.js && echo " JS: OK" || echo " JS: not found (add file)"
-
-            # ── Check 404 works ──
-            STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost/this-does-not-exist)
-            if [ "$STATUS" = "404" ]; then
-              echo " 404 page: OK"
-            else
-              echo " 404 returned: $STATUS"
-            fi
-
-            # ── Clean up old Docker images ──
-            echo "Cleaning up unused images..."
-            docker image prune -f
-
-            echo "══════════════════════════════════════"
-            echo " DEPLOYMENT COMPLETED SUCCESSFULLY"
-            echo " Site: http://${{ secrets.EC2_HOST }}"
-            echo "══════════════════════════════════════"
-
-      # ── Step 5: Report Deployment Status ──────────────────
-      - name:  Deployment Summary
+      - name: Deployment Summary
         if: always()
         run: |
-          if [ "${{ job.status }}" = "success" ]; then
-            echo " Deployment SUCCEEDED"
-            echo " Live at: http://${{ secrets.EC2_HOST }}"
-            echo " Image: ${{ env.DOCKER_IMAGE }}:latest"
-            echo " Build: #${{ github.run_number }}"
-          else
-            echo " Deployment FAILED"
-            echo "Check the Deploy step logs above for details"
-          fi
+          echo "Application URL: http://${{ secrets.EC2_HOST }}"
